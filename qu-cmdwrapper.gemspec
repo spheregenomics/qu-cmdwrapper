@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Qu::Cmdwrapper::VERSION
   spec.authors       = ["Wubin Qu"]
   spec.email         = ["quwubin@gmail.com"]
-  spec.description   = %q{A wrapper command-line tools}
-  spec.summary       = %q{A wrapper command-line tools}
+  spec.description   = %q{A wrapper for command-line tools, mostly are bioinformatics related tools}
+  spec.summary       = %q{A wrapper for command-line tools}
   spec.homepage      = "http://quwubin.cn"
   spec.license       = "MIT"
 
