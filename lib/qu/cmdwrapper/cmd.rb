@@ -63,6 +63,22 @@ module Qu
       return records
     end
 
+    def get_binding_seq_list(binding_range_list, twobit_file) 
+      amp_seq_list = []
+      
+      return amp_seq_list if binding_range_list.empty?
+
+      begin
+        fh = Tempfile.new('binding_range_list')
+        fh.write(binding_range_list.join("\n"))
+        fh.close
+        amp_seq_list = twoBitToFa(fh.path, twobit_file)
+      ensure
+        fh.unlink
+      end
+      return amp_seq_list   
+    end
+
     class ShellError < StandardError; end
 
     def system_quietly(*cmd)
