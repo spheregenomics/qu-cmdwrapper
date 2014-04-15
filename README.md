@@ -1,6 +1,6 @@
 # Qu::Cmdwrapper
 
-TODO: Write a gem description
+qu-cmdwrapper: A wrapper for command-line tools, mostly are bioinformatics related tools
 
 ## Installation
 
@@ -18,7 +18,10 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+# retrieve sequence from two bit formated database with twoBitToFa command
+amp_seq_list = Cmdwrapper::twoBitToFa(fh.path, db + Qu::Mfeindex::DB_2BIT)
+```
 
 ## Contributing
 
