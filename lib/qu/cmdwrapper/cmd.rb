@@ -27,15 +27,67 @@ module Qu
       end
     end
 
-    def ntthal(s1, s2=nil, mv=50, dv=1.5, d=50, n=0.25, mode='ANY')
+    def ntthal(s1, s2=nil, mv=50, dv=1.5, d=50, n=0.25, mode='ANY', tm_only=false)
       cmd = File.join(BIN_PATH, 'ntthal')
       if s2
-        tm = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -r -path #{THERMO_PATH} -a #{mode}`
+        # tm = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -r -path #{THERMO_PATH} -a #{mode}`
+        out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -path #{THERMO_PATH} -a #{mode}`
       else
-        tm = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -r -path #{THERMO_PATH} -a HAIRPIN`
+        out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -path #{THERMO_PATH} -a HAIRPIN`
       end
 
-      return tm.to_f
+      puts out
+
+      begin
+        lines = out.lines
+        tm = lines.shift.split("\t")[-1].delete("t=").strip.to_f
+
+        if tm_only
+          return tm
+        end
+
+        lines = lines.map {|line| line.split("\t")[1].chomp}
+
+        if s2
+          seq_1 = ''
+          align = ''
+          seq_2 = ''
+          # puts lines
+          (0...lines[0].size).each do |index|
+            if lines[1][index] != ' '
+              seq_1 << lines[1][index]
+              seq_2 << lines[2][index]
+              align << '|'
+            else
+              align << ' '
+              seq_1 << lines[0][index]
+              seq_2 << lines[3][index]
+            end
+          end
+
+          seq_1.sub!(/\-+$/, '')
+          return tm, seq_1, align, seq_2
+
+        else
+          align = lines[0]
+          seq = lines[1]
+
+          return tm, seq, align
+        end
+
+      rescue Exception => e
+        
+        if tm_only
+          return 0
+        else
+          if s2
+            return 0, '', '', ''
+          else
+            return 0, '', ''
+          end
+        end
+      end
+
     end
 
     def faToTwoBit(fasta, twobit)
@@ -105,5 +157,14 @@ module Qu
 end
 
 if $0 == __FILE__
-  puts Qu::Cmdwrapper::BIN_PATH
+
+  p1 = 'tccctcctctacaactACCTCGC'
+  p2 = 'TTGGTCGAGGGGAACAGCAGGT'
+  p3 = 'TGTGTGCAGCTGCTGGTGGC'
+  # p1 = 'act'
+  # p2 = 'ctt'
+  p Qu::Cmdwrapper::ntthal(p1, p2)
+  p Qu::Cmdwrapper::ntthal(p1)
+  p Qu::Cmdwrapper::ntthal(p2)
+  p Qu::Cmdwrapper::ntthal(p3)
 end
