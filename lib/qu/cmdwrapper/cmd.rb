@@ -2,7 +2,6 @@
 
 require 'open3'
 require 'tempfile'
-require 'qu/utils'
 
 module Qu
   module Cmdwrapper
@@ -33,9 +32,11 @@ module Qu
 
       if s2
         # tm = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -r -path #{THERMO_PATH} -a #{mode}`
-        out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -path #{THERMO_PATH} -a #{mode}`
+        # out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -path #{THERMO_PATH} -a #{mode}`
+        out = system_quietly("#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -path #{THERMO_PATH} -a #{mode}")
       else
-        out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -path #{THERMO_PATH} -a HAIRPIN`
+        # out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -path #{THERMO_PATH} -a HAIRPIN`
+        out = system_quietly("#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -path #{THERMO_PATH} -a HAIRPIN")
       end
 
       begin
