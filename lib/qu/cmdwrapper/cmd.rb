@@ -27,16 +27,15 @@ module Qu
       end
     end
 
-    def ntthal(s1, s2=nil, mv=50, dv=1.5, d=50, n=0.25, mode='ANY', tm_only=false)
+    def ntthal(s1, s2: nil, mv: 50, dv: 1.5, d: 50, n: 0.25, mode: 'ANY', tm_only: false)
       cmd = File.join(BIN_PATH, 'ntthal')
+
       if s2
         # tm = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -r -path #{THERMO_PATH} -a #{mode}`
         out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -s2 #{s2} -path #{THERMO_PATH} -a #{mode}`
       else
         out = `#{cmd} -mv #{mv} -dv #{dv} -d #{d} -n #{n} -s1 #{s1} -path #{THERMO_PATH} -a HAIRPIN`
       end
-
-      puts out
 
       begin
         lines = out.lines
@@ -76,7 +75,7 @@ module Qu
         end
 
       rescue Exception => e
-        
+
         if tm_only
           return 0
         else
@@ -163,7 +162,7 @@ if $0 == __FILE__
   p3 = 'TGTGTGCAGCTGCTGGTGGC'
   # p1 = 'act'
   # p2 = 'ctt'
-  p Qu::Cmdwrapper::ntthal(p1, p2)
+  p Qu::Cmdwrapper::ntthal(p1, s2: p2, tm_only: true)
   p Qu::Cmdwrapper::ntthal(p1)
   p Qu::Cmdwrapper::ntthal(p2)
   p Qu::Cmdwrapper::ntthal(p3)
