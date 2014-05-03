@@ -42,7 +42,9 @@ module Qu
 
       begin
         lines = out.lines
-        
+
+        tm = nil
+        dg = nil
         if lines.shift =~ /.*dG\s+=\s+(-?\d+\.?\d+)\s+t\s+=\s+(\d+\.?\d+)/
           dg = $1.to_f / 1000
           tm = $2.to_f
@@ -72,13 +74,13 @@ module Qu
           end
 
           seq_1.sub!(/\-+$/, '')
-          return tm, seq_1, align, seq_2
+          return tm, dg, seq_1, align, seq_2
 
         else
           align = lines[0]
           seq = lines[1]
 
-          return tm, seq, align
+          return tm, dg, seq, align
         end
 
       rescue Exception => e
@@ -87,9 +89,9 @@ module Qu
           return 0
         else
           if s2
-            return 0, '', '', ''
+            return nil, nil, '', '', ''
           else
-            return 0, '', ''
+            return nil, nil, '', ''
           end
         end
       end
