@@ -2,6 +2,7 @@
 
 require 'open3'
 require 'tempfile'
+require 'qu/utils'
 
 module Qu
   module Cmdwrapper
@@ -27,7 +28,7 @@ module Qu
       end
     end
 
-    def ntthal(s1, s2: nil, mv: 50, dv: 1.5, d: 50, n: 0.25, mode: 'ANY', tm_only: false)
+    def ntthal(s1:, s2: nil, mv: 50, dv: 1.5, d: 50, n: 0.25, mode: 'ANY', tm_only: false)
       cmd = File.join(BIN_PATH, 'ntthal')
 
       if s2
@@ -162,8 +163,8 @@ if $0 == __FILE__
   p3 = 'TGTGTGCAGCTGCTGGTGGC'
   # p1 = 'act'
   # p2 = 'ctt'
-  p Qu::Cmdwrapper::ntthal(p1, s2: p2, tm_only: true)
-  p Qu::Cmdwrapper::ntthal(p1)
-  p Qu::Cmdwrapper::ntthal(p2)
-  p Qu::Cmdwrapper::ntthal(p3)
+  p Qu::Cmdwrapper::ntthal(s1: p1, s2: p2, tm_only: true)
+  p Qu::Cmdwrapper::ntthal(s1: p1)
+  p Qu::Cmdwrapper::ntthal(s1: p2)
+  p Qu::Cmdwrapper::ntthal(s1: p3)
 end
