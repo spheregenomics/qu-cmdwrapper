@@ -2,6 +2,7 @@
 
 require 'open3'
 require 'tempfile'
+require 'qu/utils'
 
 module Qu
   module Cmdwrapper
@@ -41,7 +42,11 @@ module Qu
 
       begin
         lines = out.lines
-        tm = lines.shift.split("\t")[-1].delete("t=").strip.to_f
+        
+        if lines.shift =~ /.*dG\s+=\s+(-?\d+\.?\d+)\s+t\s+=\s+(\d+\.?\d+)/
+          dg = $1.to_f / 1000
+          tm = $2.to_f
+        end
 
         if tm_only
           return tm
@@ -164,8 +169,8 @@ if $0 == __FILE__
   p3 = 'TGTGTGCAGCTGCTGGTGGC'
   # p1 = 'act'
   # p2 = 'ctt'
-  p Qu::Cmdwrapper::ntthal(s1: p1, s2: p2, tm_only: true)
-  p Qu::Cmdwrapper::ntthal(s1: p1)
-  p Qu::Cmdwrapper::ntthal(s1: p2)
-  p Qu::Cmdwrapper::ntthal(s1: p3)
+  puts Qu::Cmdwrapper::ntthal(s1: p1, s2: p2, tm_only: false)
+  puts Qu::Cmdwrapper::ntthal(s1: p1)
+  puts Qu::Cmdwrapper::ntthal(s1: p2)
+  puts Qu::Cmdwrapper::ntthal(s1: p3)
 end
